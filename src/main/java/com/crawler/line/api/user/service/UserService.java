@@ -28,7 +28,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    //mail util에 옴겨옴겨~
+    // mail util에 옴겨옴겨~
     @Value("${mail.sender.id}")
     String gmailSenderId;
 
@@ -51,8 +51,8 @@ public class UserService {
                 setCookie.setMaxAge(60 * 60 * 24 * 30);
                 setCookie.setPath("/");
                 httpResponse.addCookie(setCookie);
-
                 user.setToken(token);
+
             } else {
                 throw new UserLoginException(ApiResponseCode.USER_AUTH_FAIL);
             }

@@ -23,34 +23,23 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        Cookie[] cookies = request.getCookies();
-        String[] authorization = null;
-        if (cookies != null && cookies.length > 0) {
-            Optional<String> cookie = readCookie(request, "Authorization");
-            if (!cookie.isPresent()) {
-                throw new UserLoginException(ApiResponseCode.USER_AUTH_FAIL);
-            } else {
-                try {
-                    authorization = cookie.get().split(" ");
-                } catch (Exception e) {
-                    throw new UserLoginException(ApiResponseCode.TOKEN_ERROR);
-                }
+        String authorizationHeader = request.getHeader("Authorization");
+        log.info("interceptor Authorization : {}", authorizationHeader);
+        if (authorizationHeader == null) {
+            throw new UserLoginException(ApiResponseCode.USER_AUTH_FAIL);
+        } else {
+            try {
+                String[] authorization = authorizationHeader.split(" ");
 
-                log.debug("interceptor Authorization scheme : {}", authorization[0]);
-                log.debug("interceptor Authorization token : {}", authorization[1]);
+                log.info("interceptor Authorization scheme : {}", authorization[0]);
+                log.info("interceptor Authorization token : {}", authorization[1]);
 
                 String loginId = JwtUtil.verifyToken(authorization[1]);
                 request.setAttribute("id", loginId);
-
-                return true;
+            } catch (Exception e) {
+                throw new UserLoginException(ApiResponseCode.TOKEN_ERROR);
             }
-        } else {
-            throw new UserLoginException(ApiResponseCode.USER_AUTH_FAIL);
+            return true;
         }
-    }
-
-    public Optional<String> readCookie(HttpServletRequest request, String key) {
-        System.out.println(request.getHeaders("Authorization"));
-        return Arrays.stream(request.getCookies()).filter(c -> key.equals(c.getName())).map(Cookie::getValue).findAny();
     }
 }

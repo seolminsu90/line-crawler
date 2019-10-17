@@ -9,5 +9,14 @@ import lombok.Data;
 
 @Data
 @JsonInclude(Include.NON_NULL)
-public class ArticleDTO implements Serializable{
+public class ArticleDTO implements Serializable {
+    private Integer page;
+
+    public Integer getPage() {
+        if (this.page == null) {
+            return 1;
+        } else {
+            return this.page;
+        }
+    }
 }

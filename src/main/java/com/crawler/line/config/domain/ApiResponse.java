@@ -2,6 +2,8 @@ package com.crawler.line.config.domain;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -14,6 +16,7 @@ public class ApiResponse<T> {
     private List<T> list;
     private String code;
     private String msg;
+    private Pageable pageable;
 
     public ApiResponse(ApiResponseCode code) {
         this.code = code.getValue();
@@ -30,5 +33,12 @@ public class ApiResponse<T> {
         this.list = list;
         this.code = code.getValue();
         this.msg = code.getMessage();
+    }
+
+    public ApiResponse(List<T> list, Pageable pageable, ApiResponseCode code) {
+        this.list = list;
+        this.code = code.getValue();
+        this.msg = code.getMessage();
+        this.pageable = pageable;
     }
 }
