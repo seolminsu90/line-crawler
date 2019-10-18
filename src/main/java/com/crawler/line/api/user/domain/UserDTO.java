@@ -17,9 +17,12 @@ public class UserDTO implements Serializable {
     @Email
     private String id;
 
-    @Size(min = 8, max = 20)
+    @Size(min = 8, max = 30)
     private String pwd;
 
-    @Size(min = 8, max = 20)
+    @Size(min = 8, max = 30)
+    private String pwdNew;
+
+    @Size(min = 8, max = 30)
     private String pwdRe;
 }

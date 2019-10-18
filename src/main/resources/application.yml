@@ -17,11 +17,7 @@ spring:
     hibernate:
       ddl-auto: none
     generate-ddl: false
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: false
-mail: 
-  sender:
-    id: none
-    pwd: none

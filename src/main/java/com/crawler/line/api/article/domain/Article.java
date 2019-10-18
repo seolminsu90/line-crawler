@@ -18,7 +18,8 @@ import lombok.Data;
 @JsonInclude(Include.NON_NULL)
 public class Article implements Serializable {
     @Id
-    private Long articleId;
+    private String articleId;
+    private Long seq;
     private String writer;
     private String title;
     private String content;

@@ -4,12 +4,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.crawler.line.api.user.domain.User;
@@ -18,6 +18,7 @@ import com.crawler.line.api.user.repository.UserRepository;
 import com.crawler.line.config.domain.ApiResponseCode;
 import com.crawler.line.config.exception.UserLoginException;
 import com.crawler.line.util.JwtUtil;
+import com.crawler.line.util.MailSender;
 import com.crawler.line.util.SHAEncoder;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +29,8 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    // mail util에 옴겨옴겨~
-    @Value("${mail.sender.id}")
-    String gmailSenderId;
-
-    @Value("${mail.sender.pwd}")
-    String gmailSenderPwd;
+    @Autowired
+    MailSender mailSender;
 
     public User login(UserDTO dto, HttpServletResponse httpResponse) {
         User user = null;
@@ -85,63 +82,58 @@ public class UserService {
         return null;
     }
 
-    public User update(UserDTO dto) {
-        Optional<User> existsCheck = userRepository.findById(dto.getId());
+    public User update(UserDTO dto, String id) {
+        try {
+            User user = userRepository.findByIdAndPwd(id, SHAEncoder.encode(dto.getPwd()));
+            if (user != null) {
+                user.setPwd(SHAEncoder.encode(dto.getPwdNew()));
 
-        if (existsCheck.isPresent()) {
-            User user = existsCheck.get();
-            try {
-                // 패스워드 변경 시
-                if (dto.getPwd().equals(dto.getPwdRe())) {
-                    user.setPwd(SHAEncoder.encode(dto.getPwd()));
-                }
+                // 기타 추가 업데이트 사항 필요시 추가...
 
-                // 기타 추가 업데이트 사항추가...
-
-                user.setId(dto.getId());
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
+                userRepository.save(user);
+            } else {
+                throw new UserLoginException(ApiResponseCode.USER_PWD_NOTMATCH);
             }
-
-            userRepository.save(user);
-        } else {
-            throw new UserLoginException(ApiResponseCode.USER_NOTFOUND);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public User delete(UserDTO dto) {
-        // 탈퇴 시 비밀번호 요구
-        if (dto.getId() == null || dto.getPwd() == null) {
-            throw new UserLoginException(ApiResponseCode.USER_LOGIN_ERROR);
-        }
+    public User delete(String id, HttpServletResponse httpResponse) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
 
-        Optional<User> existsCheck = userRepository.findById(dto.getId());
-
-        if (existsCheck.isPresent()) {
-            User user = existsCheck.get();
-
-            try {
-                if (dto.getPwd() == null) {
-                    throw new UserLoginException(ApiResponseCode.USER_PWD_NOTMATCH);
-                }
-
-                user.setId(dto.getId());
-                user.setPwd(SHAEncoder.encode(dto.getPwd()));
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-
-            userRepository.delete(user);
+            Cookie setCookie = new Cookie("crawler-access-key", "");
+            setCookie.setMaxAge(0);
+            setCookie.setPath("/");
+            httpResponse.addCookie(setCookie);
         } else {
-            throw new UserLoginException(ApiResponseCode.USER_NOTFOUND);
+            throw new UserLoginException(ApiResponseCode.USER_PWD_NOTMATCH);
         }
 
         return null;
     }
 
-    public User sendTempPassword(UserDTO dto) {
+    public User sendTempPassword(String id) {
+        try {
+            Optional<User> exists = userRepository.findById(id);
+            if (exists.isPresent()) {
+                User user = exists.get();
+                String tempPassword = UUID.randomUUID().toString().replace(" ", "").substring(0, 8);
+                log.info("Temp Password :: {}", tempPassword);
+                mailSender.send(id, tempPassword);
+
+                user.setPwd(SHAEncoder.encode(tempPassword));
+                userRepository.save(user);
+            } else {
+                throw new UserLoginException(ApiResponseCode.USER_NOTFOUND);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

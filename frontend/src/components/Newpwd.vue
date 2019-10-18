@@ -5,17 +5,17 @@
       <h2>LINE SQUARE</h2>
       <div>
         <p>
-          <input placeholder="이메일 (8자 이상)" maxlength="30" v-model.trim="user.id" id="id" type="text"/>
+          <input placeholder="현재 비밀번호 (8자 이상)" maxlength="30" v-model.trim="user.pwd" id="pwd" type="password"/>
         </p>
         <p>
-          <input placeholder="비밀번호 (8자 이상)" maxlength="30" v-model.trim="user.pwd" id="pwd" type="password"/>
+          <input placeholder="새로운 비밀번호 (8자 이상)" maxlength="30" v-model.trim="user.pwdNew" id="pwdNew" type="password"/>
         </p>
         <p>
-          <input placeholder="비밀번호 재확인 (8자 이상)" maxlength="30" v-model.trim="user.pwdRe" id="pwdRe" type="password"/>
+          <input placeholder="새로운 비밀번호 재입력 (8자 이상)" maxlength="30" v-model.trim="user.pwdRe" id="pwdRe" type="password"/>
         </p>
-        <button type="button" @click="signin">회원 가입</button>
+        <button type="button" @click="update">비밀번호 변경</button>
         <div class="otherAction">
-          <span @click="navigate('/')">취소</span>
+          <span @click="navigate('/list')">취소</span>
         </div>
       </div>
     </section>
@@ -24,39 +24,41 @@
 
 <script>
 export default {
-  name: 'Signin',
+  name: 'pwdNew',
   data () {
     return {
       user : {
-        id : "",
         pwd : "",
+        pwdNew : "",
         pwdRe : ""
       },
       userReset : {
-        id : "",
         pwd : "",
+        pwdNew : "",
         pwdRe : ""
       }
     }
   },
   methods : {
-    signin (){
-      if(this.user.pwd !== this.user.pwdRe){
+    update (){
+      var $this = this;
+      if(this.user.pwdNew !== this.user.pwdRe){
         return alert("비밀번호 확인이 일치하지 않습니다.");
       }
-      
-      this.$axios.post("/api/users/signin", this.user).then((response) => {
+      this.$axios.put("/api/users", this.user,{
+         headers: {
+           Authorization: 'Bearer ' + $this.$store.state.token
+         }
+       }).then((response) => {
         var result = response.data;
         if(result.code == "0000"){
-          alert("이제 서비스를 이용할 수 있습니다.");
+          alert("비밀번호가 수정되었습니다.");
           this.navigate('/');
-        } else if(result.code == "0103"){
+        } else if(result.code == "0102"){
           this.user = this.userReset;
-          return alert("아이디 또는 비밀번호 값 오류");
-        } else if(result.code == "0101"){
+          return alert("기존 패스워드가 일치하지 않습니다.");
+        } else {
           this.user = this.userReset;
-          return alert("이미 가입된 아이디입니다.");
-        } else{
           return alert("오류");
         }
       }).catch(err => {

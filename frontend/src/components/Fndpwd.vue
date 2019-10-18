@@ -1,19 +1,15 @@
-  
 <template>
   <section id="login">
     <section id="loginWrap">
       <h2>LINE SQUARE</h2>
       <div>
         <p>
-          <input placeholder="이메일 (8자 이상)" maxlength="30" v-model.trim="user.id" id="id" type="text"/>
+          <input placeholder="가입했던 이메일을 입력하세요" maxlength="30" v-model.trim="user.id" id="id" type="text"/>
         </p>
-        <p>
-          <input placeholder="비밀번호 (8자 이상)" maxlength="30" v-model.trim="user.pwd" id="pwd" type="password"/>
-        </p>
-        <p>
-          <input placeholder="비밀번호 재확인 (8자 이상)" maxlength="30" v-model.trim="user.pwdRe" id="pwdRe" type="password"/>
-        </p>
-        <button type="button" @click="signin">회원 가입</button>
+
+        <button v-if="!waiting" type="button" @click="findPwd">임시 비밀번호 보내기</button>
+        <button v-else class="disable" type="button">메일을 보내는 중...</button>
+
         <div class="otherAction">
           <span @click="navigate('/')">취소</span>
         </div>
@@ -24,43 +20,35 @@
 
 <script>
 export default {
-  name: 'Signin',
+  name: 'Fndpwd',
   data () {
     return {
+      waiting : false,
       user : {
-        id : "",
-        pwd : "",
-        pwdRe : ""
-      },
-      userReset : {
-        id : "",
-        pwd : "",
-        pwdRe : ""
+        id : ""
       }
     }
   },
   methods : {
-    signin (){
-      if(this.user.pwd !== this.user.pwdRe){
-        return alert("비밀번호 확인이 일치하지 않습니다.");
+    findPwd(){
+    var $this = this;
+      if(this.user.id == "" || this.user.id == undefined){
+        return alert("메일을 입력하세요.");
       }
-      
-      this.$axios.post("/api/users/signin", this.user).then((response) => {
+
+      $this.waiting = true;
+      this.$axios.post("/api/users/send-temp-pwd", this.user).then((response) => {
+        $this.waiting = false;
         var result = response.data;
         if(result.code == "0000"){
-          alert("이제 서비스를 이용할 수 있습니다.");
-          this.navigate('/');
-        } else if(result.code == "0103"){
-          this.user = this.userReset;
-          return alert("아이디 또는 비밀번호 값 오류");
-        } else if(result.code == "0101"){
-          this.user = this.userReset;
-          return alert("이미 가입된 아이디입니다.");
+          return alert("메일이 발송되었습니다. 메일함을 확인해 주세요.");
+        } else if(result.code == "0104"){
+          return alert("없는 유저입니다.");
         } else{
           return alert("오류");
         }
       }).catch(err => {
-        console.log(err.response);
+        $this.waiting = false;
         if(err.response.status == 400){
           return alert("아이디와 패스워드 형식이 맞지 않습니다. \n'이메일형식 8~30자'");
         }

@@ -69,7 +69,7 @@ public class ArticleListPage implements Page {
 
                         article.setBbsGroupId(splitStr[0]);
                         article.setBbsId(splitStr[1]);
-                        article.setArticleId(Long.parseLong(splitStr[2]));
+                        article.setArticleId(splitStr[2]);
 
                         // 1일 이내의 글은 오늘 시간,분 을 제하여 변경 ..초도 있다
                         if (regDate.indexOf("시간 전") != -1 || regDate.indexOf("분 전") != -1
@@ -79,8 +79,12 @@ public class ArticleListPage implements Page {
                             if (regDate.indexOf("분 전") != -1) {
                                 calendar.add(Calendar.MINUTE, -interval);
                             } else if (regDate.indexOf("시간 전") != -1) {
-                                calendar.add(Calendar.HOUR_OF_DAY, -interval);
+                                calendar.add(Calendar.HOUR, -interval);
                             }
+                            article.setRegDate(calendar.getTime());
+                        } else if (regDate.indexOf("하루 전") != -1) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.add(Calendar.DATE, -1);
                             article.setRegDate(calendar.getTime());
                         } else {
                             article.setRegDate(sdf.parse(regDate));

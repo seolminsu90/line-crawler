@@ -4,17 +4,15 @@
       <h2>LINE SQUARE</h2>
       <div>
         <p>
-          <label for="id">ID</label>
-          <input placeholder="Email" maxlength="30" v-model.trim="user.id" id="id" type="text"/>
+          <input placeholder="이메일" maxlength="30" v-model.trim="user.id" id="id" type="text"/>
         </p>
         <p>
-          <label for="pwd">PWD</label>
-          <input placeholder="Password" maxlength="30" v-model.trim="user.pwd" id="pwd" type="password"/>
+          <input placeholder="비밀번호" maxlength="30" v-model.trim="user.pwd" id="pwd" type="password"/>
         </p>
         <button type="button" @click="login">로그인</button>
         <div class="otherAction">
           <span @click="navigate('/signin')">회원가입</span>
-          <span>비밀번호 찾기</span>
+          <span @click="navigate('/findpwd')">비밀번호 찾기</span>
         </div>
       </div>
     </section>
@@ -38,14 +36,12 @@ export default {
       this.$axios.post("/api/users/login", this.user).then((response) => {
         var result = response.data;
         if(result.code == "0000"){
-          console.log("로그인 성공");
-
           this.$store.commit('loginAfter',result.data.token);
           this.navigate('/list');
         } else if(result.code == "0100"){
-          console.log("로그인 실패");
-
           return alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+        } else{
+          return alert("오류");
         }
       }).catch(err => {
         console.log(err.response);
@@ -54,7 +50,6 @@ export default {
         }
       })
     }
-  
   }
 }
 </script>
@@ -100,7 +95,7 @@ input{
   background:rgba(0,0,0,0);
   border-bottom:1px solid #fff;
   color:#fff;
-  width:250px;
+  width:100%;
 }
 label{
   font-weight:bold;

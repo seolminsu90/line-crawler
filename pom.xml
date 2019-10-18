@@ -45,11 +45,13 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- Apikey JWT -->
     <dependency>
       <groupId>com.auth0</groupId>
       <artifactId>java-jwt</artifactId>
       <version>3.8.1</version>
     </dependency>
+    <!-- 크롤링 관련 -->
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
@@ -59,7 +61,12 @@
       <artifactId>jsoup</artifactId>
       <version>1.12.1</version>
     </dependency>
-
+    <!-- 메일 -->
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4.7</version>
+    </dependency>
   </dependencies>
 
   <build>

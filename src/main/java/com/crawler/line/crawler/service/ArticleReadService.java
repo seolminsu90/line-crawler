@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.openqa.selenium.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.crawler.line.api.article.domain.Article;
@@ -22,7 +21,6 @@ public class ArticleReadService {
     @Autowired
     ArticleRepository articleRepository;
 
-    @Async
     public void readArticle(Game game) {
         Selenium selenium = new Selenium();
         ArticleListPage listPage = new ArticleListPage(selenium);
@@ -31,7 +29,7 @@ public class ArticleReadService {
         if (!articleList.isEmpty()) {
             articleList.stream().forEach(article -> {
                 try {
-                    readArticleDetail(article, selenium);
+                    readArticleDetail(article, selenium, true);
                 } catch (NoSuchElementException e) {
                     log.error(e.getMessage());
                 }
@@ -39,9 +37,9 @@ public class ArticleReadService {
         }
     }
 
-    public void readArticleDetail(Article article, Selenium selenium) {
+    public void readArticleDetail(Article article, Selenium selenium, boolean existsCheck) {
         Article articleExists = articleRepository.findByArticleId(article.getArticleId());
-        if (articleExists == null) {
+        if (articleExists == null || !existsCheck) {
             ArticleDetailPage detailPage = new ArticleDetailPage(selenium);
             String detailUrl = "https://square.line.games/" + article.getBbsGroupId() + "/" + article.getBbsId()
                     + "/expage/" + article.getArticleId();

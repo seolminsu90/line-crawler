@@ -65,11 +65,18 @@ button{
   background:#00B900;
   border:none;
 }
+button:hover{
+  background:#339933;
+  cursor:pointer;
+}
+button.disable{
+  opacity:0.3;
+}
 
 input {
   border:none;
   height:30px;
-  font-size:1.1em;
+  font-size:0.9em;
   text-indent:5px;
 }
 
@@ -79,5 +86,29 @@ textarea:focus, input:focus{
 
 *:focus {
     outline: none;
+}
+.paginationWrap{
+  width:100%;
+}
+.pagination{
+  width:50%;
+  margin:0 auto;
+  text-align:center;
+}
+.pagination li{
+  display:inline-block;
+  font-size:1.0em;
+  padding:3px;
+  margin:2px;
+}
+.pagination li:hover{
+  color:#00B900;
+}
+.pagination .pageItem.active{
+  font-weight:bold;
+  color:#00B900;
+}
+.pagination .pageItem{
+  font-size:1.1em;
 }
 </style>

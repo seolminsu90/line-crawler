@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,20 +39,20 @@ public class UserController {
 
     // 유저 임시비밀번호 발송 (Gmail 계정 정보를 입력해야 사용 가능)
     @PostMapping("/send-temp-pwd")
-    public ApiResponse<User> sendTempPassword(@RequestBody UserDTO dto) {
-        return null;
+    public ApiResponse<User> sendTempPassword(@RequestBody @Valid UserDTO dto) {
+        return new ApiResponse<>(userService.sendTempPassword(dto.getId()), ApiResponseCode.OK);
     }
 
     // 유저 정보 수정
     @PutMapping
-    public ApiResponse<User> update(@RequestBody @Valid UserDTO dto) {
-        return new ApiResponse<>(userService.update(dto), ApiResponseCode.OK);
+    public ApiResponse<User> update(@RequestBody @Valid UserDTO dto, @RequestAttribute String id) {
+        return new ApiResponse<>(userService.update(dto, id), ApiResponseCode.OK);
     }
 
     // 유저 삭제
     @DeleteMapping
-    public ApiResponse<User> delete(@RequestBody UserDTO dto) {
-        return new ApiResponse<>(userService.delete(dto), ApiResponseCode.OK);
+    public ApiResponse<User> delete(@RequestAttribute String id, HttpServletResponse response) {
+        return new ApiResponse<>(userService.delete(id, response), ApiResponseCode.OK);
     }
 
 }
