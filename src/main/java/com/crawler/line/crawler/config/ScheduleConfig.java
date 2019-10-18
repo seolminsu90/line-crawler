@@ -21,8 +21,7 @@ public class ScheduleConfig {
     ArticleReadService articleReadService;
 
     // 1분에 1번 동작
-    // @Scheduled(fixedDelay = 60000)
-    @Scheduled(fixedDelay = 3600000)
+    @Scheduled(fixedDelay = 60000)
     public void scheduling() {
         log.info("게시글을 가져옵니다.");
         gameRepository.findAll().parallelStream().forEach(game -> {

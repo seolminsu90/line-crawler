@@ -36,9 +36,9 @@ CREATE TABLE TB_GAME(
 INSERT INTO TB_GAME
   (GAME_NAME, TARGET_URL)
   VALUES
-  ('드래곤플라이트', 'https://square.line.games/dragonflight?lang=ko'),
-  ('엘브릿사', 'https://square.line.games/elbrisa?lang=ko'),
-  ('스피릿캐처', 'https://square.line.games/spiritcatcher?lang=ko');
+  ('DRAGONFLIGHT', 'https://square.line.games/dragonflight?lang=ko'),
+  ('ELBRISA', 'https://square.line.games/elbrisa?lang=ko'),
+  ('SPRITCATCHER', 'https://square.line.games/spiritcatcher?lang=ko');
 
 /* 임 시 pwd : 12377777774 */
 INSERT INTO TB_USER
