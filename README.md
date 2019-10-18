@@ -36,3 +36,6 @@ java -jar .\line-crawler-0.0.1-SNAPSHOT.jar
 - 9.  로그아웃
 - 10. 게시글목록보기
 - 11. 게시글상세보기
+
+### 압축 파일
+https://github.com/seolminsu90/static
