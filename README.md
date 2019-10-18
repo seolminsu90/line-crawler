@@ -10,6 +10,7 @@ LINE community crawler
 ```bash
 java -D'webdriver.chrome.driver=.\chromedriver.exe' -jar .\selenium-server-standalone-3.141.59.jar -timeout 300 -browserTimeout 60 -port 44444
 ```
+- 압축동봉된 exe가 아닌 chromedriver로 구동하면 리눅스에서도 구동이 가능합니다.
 
 ### 크롤러 서버 구동
 ```bash
