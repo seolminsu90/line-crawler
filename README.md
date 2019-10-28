@@ -39,3 +39,16 @@ java -jar .\line-crawler-0.0.1-SNAPSHOT.jar
 
 ### 압축 파일
 https://github.com/seolminsu90/static
+
+### 기타 (Git Clone 후 빌드 방법)
+```bash
+## 프론트엔드 빌드
+cd frontend
+npm run build
+
+## 프로젝트 빌드
+cd .. # Go project root
+mvn clean package -DskipTests=true
+
+java -jar 실행
+```

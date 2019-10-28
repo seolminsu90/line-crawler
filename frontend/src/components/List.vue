@@ -67,6 +67,9 @@
         <p class="sub">
           댓글 : <span>{{article.commentCnt}}</span> | 좋아요 : <span>{{article.likeCnt}}</span> | 싫어요 : <span>{{article.unlikeCnt}}</span> | 조회수 : <span>{{article.viewCnt}}</span>
         </p>
+        <div>
+          <comment :article="article"></comment>
+        </div>
       </article>
       <button type="button" v-if="articleDetailView" @click="closeDetail">상세보기 팝업 닫기</button>
     </section>
@@ -74,8 +77,9 @@
 </template>
 
 <script>
-import MainHeader from '@/Components/common/header.vue'
+import MainHeader from '@/Components/common/header'
 import Paginate from 'vuejs-paginate'
+import Comment from '@/components/Comment'
 
 export default {
   name: 'List',
@@ -85,7 +89,8 @@ export default {
   },
   components: {
     'main-header' : MainHeader,
-    'paginate' : Paginate
+    'paginate' : Paginate,
+    'comment' : Comment
   },
   data () {
     return {

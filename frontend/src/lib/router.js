@@ -5,6 +5,7 @@ import Signin from '@/components/Signin'
 import Newpwd from '@/components/Newpwd'
 import Fndpwd from '@/components/Fndpwd'
 import List from '@/components/List'
+import Comment from '@/components/Comment'
 
 import Item from '@/components/Item'
 
