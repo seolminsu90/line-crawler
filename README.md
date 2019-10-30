@@ -52,3 +52,10 @@ mvn clean package -DskipTests=true
 
 java -jar 실행
 ```
+
+### 추가 업데이트 기능
+- 1. 게시글 상세보기 시 댓글 가져오기
+- 2. 서버 빌드 환경에서 Refresh 시 RequestMapping에서 URL을 찾아 404 error redirect 하는 부분 수정
+    - Dev 환경에서는 Frontend와 Server가 프로세스 분리되어 있어서 발생하지 않았었음.
+    - ErrorController를 구현하여 해결
+    - 또는 Vue router mode를 Hash로 해야하는데 /#/ 붙는게 별로라서.... 배제하였다.
