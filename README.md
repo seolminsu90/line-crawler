@@ -1,5 +1,6 @@
 # line-crawler
-LINE community crawler
+LINE community crawler.
+실무에서 크롤러 활용할 일이 있어서 제작
 
 ##
 - Java, Spring Boot, Vuejs
