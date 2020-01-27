@@ -1,6 +1,6 @@
 # line-crawler
-LINE community crawler.
-실무에서 크롤러 활용할 일이 있어서 제작
+- 실무에서 크롤러 활용할 일이 있어서 제작
+- 라인 스퀘어의 커뮤니티 게시글을 크롤링 하는 기능
 
 ##
 - Java, Spring Boot, Vuejs
