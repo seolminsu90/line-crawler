@@ -1,8 +1,8 @@
 # line-crawler
 - 라인 스퀘어의 커뮤니티 게시글을 크롤링 하는 앱
 
-##
-- Java, Spring Boot, Vuejs
+## 활용 기술
+- Java, Spring Boot, Vuejs, Selenium, vue-cli
 
 ## 압출 파일 압축 해제 후 구동 방법 (Windows 환경)
 
