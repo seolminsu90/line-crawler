@@ -1,5 +1,6 @@
 # line-crawler
 - 라인 스퀘어의 커뮤니티 게시글을 크롤링 하는 앱
+- 2021/5/14 현재 해당 사이트가 없어져서 동작이 안된다 ㅠㅠ (에라이)
 
 ## 활용 기술
 - Java, Spring Boot, Vuejs, Selenium, vue-cli
